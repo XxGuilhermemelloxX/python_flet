@@ -64,9 +64,37 @@ class Gui:
             page.add(list_view)
             page.update()
                 
+        def btn_page_editar(e):
+            page.clean()      
+            page.add(
+                ft.Row([field_choise,field_ID],alignment=alinhamento),
+                ft.Row([field_new_choise],alignment=alinhamento),
+                ft.Row([ft.ElevatedButton('Registrar',on_click=btn_registrar,width=250)],alignment=alinhamento)
+            )
+        
+        def btn_registrar(e):
+            if not field_choise.value:
+                field_choise.error_text = 'Escolha uma opção'
+                page.update()
+            elif not field_new_choise.value:
+                field_new_choise.error_text = 'o campo não pode estar vazio'
+                page.update()
+            elif not field_ID.value:
+                field_ID.error_text = 'O Campo está vazio'
+                page.update()
+            elif not field_ID.value.isdigit:
+                field_ID.error_text= 'O ID só pode ser numeros'
+                page.update()
+            else:
+                field_choise.error_text =''
+                field_new_choise.error_text =''
+                field_ID.error_text = ''
+                id = int(field_ID.value)
+                back.editar_dado(id,field_choise.value,field_new_choise.value)
+                print(field_choise.value)
+            page.update()
             
            
-            
 
                     
 
@@ -84,6 +112,18 @@ class Gui:
             , label='SEXO'
         )
         field_senha = ft.TextField(label='Senha*', width=250, password=True)
+        field_choise = ft.Dropdown(
+                width=350,
+               options=[
+                    ft.dropdown.Option('Nome'),
+                    ft.dropdown.Option('Email'),
+                    ft.dropdown.Option('Telefone'),
+                ]
+                ,label='Escolha o campo para alterar'
+                
+            )
+        field_new_choise = ft.TextField(label='Novo campo',width=500)
+        field_ID = ft.TextField(label='Digite o ID',width=200,keyboard_type=ft.KeyboardType.NUMBER)
 
         # adicionado a pagina
         page.add(
@@ -116,6 +156,8 @@ class Gui:
                 [
                     ft.ElevatedButton('Cadastrar', on_click=botao_cadastar),
                     ft.ElevatedButton('Visualizar', on_click=btn_visualizar),
+                    ft.ElevatedButton('Editar',on_click=btn_page_editar),
+                    ft.ElevatedButton('Deletar')
 
                 ],
                 alignment=alinhamento

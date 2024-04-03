@@ -15,6 +15,7 @@ class Backend:
         cursor.execute(query,params)
         conn.commit()
         conn.close()
+    
     def visualizar(self):
         conn = sqlite3.connect('Cliente.db')
         cursor = conn.cursor()
@@ -25,8 +26,14 @@ class Backend:
         data = [dict(zip(col_names,row))for row in rows] #converte para um dicionario
         return data
         
-        
-        
+    def editar_dado(self,id,campo,novo_campo):
+        conn = sqlite3.connect('Cliente.db')
+        cursor = conn.cursor()
+        query = (f"""UPDATE cliente SET '{str(campo)}' = ? WHERE ID = ? """)
+        params = (novo_campo,id)
+        cursor.execute(query,params)
+        conn.commit()
+        conn.close()    
+
                         
-                    
             
