@@ -51,7 +51,7 @@ class Gui:
         def btn_visualizar(e):
             page.clean()
             data = back.visualizar()
-            list_view = ft.ListView(spacing=10,expand=True)            
+            list_view = ft.ListView(spacing=8)            
             
             if data is not None:
                 for row in data:
@@ -82,16 +82,19 @@ class Gui:
             elif not field_ID.value:
                 field_ID.error_text = 'O Campo está vazio'
                 page.update()
-            elif not field_ID.value.isdigit:
+            elif not field_ID.value.isdigit():
                 field_ID.error_text= 'O ID só pode ser numeros'
                 page.update()
+            elif field_choise.value == 'Telefone' and not field_new_choise.value.isdigit():         
+                field_new_choise.error_text = 'O telefone só pode ser numeros'
+                page.update()  
+                   
             else:
                 field_choise.error_text =''
                 field_new_choise.error_text =''
                 field_ID.error_text = ''
                 id = int(field_ID.value)
                 back.editar_dado(id,field_choise.value,field_new_choise.value)
-                print(field_choise.value)
             page.update()
             
            
@@ -164,5 +167,5 @@ class Gui:
             )
         )
 
-    ft.app(target=main)  # rodar desktop
-    # ft.app(target=main,view=ft.AppView.WEB_BROWSER) rodar no browser
+    ft.app(target=main)   #rodar desktop
+    #ft.app(target=main,view=ft.AppView.WEB_BROWSER)rodar no browser

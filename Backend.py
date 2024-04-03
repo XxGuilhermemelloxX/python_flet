@@ -34,6 +34,6 @@ class Backend:
         cursor.execute(query,params)
         conn.commit()
         conn.close()    
-
+    
                         
             
