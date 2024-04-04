@@ -34,6 +34,14 @@ class Backend:
         cursor.execute(query,params)
         conn.commit()
         conn.close()    
-    
+    def excluir(self,id):
+        conn = sqlite3.connect('Cliente.db')
+        cursor = conn.cursor()
+        query = (""" DELETE FROM Cliente WHERE ID = ? """)
+        params = (id)
+        cursor.execute(query,params)
+        conn.commit()
+        conn.close()  
+        
                         
             

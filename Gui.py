@@ -10,7 +10,7 @@ class Gui:
     def main(page: ft.Page):
         back = Backend()
         page.title = 'controle de acesso de pessoas'.title()
-        page.vertical_alignment = ft.MainAxisAlignment.CENTER
+        page.vertical_alignment = ft.MainAxisAlignment.NONE
         alinhamento = ft.MainAxisAlignment.CENTER
 
         # criando a ação do botão
@@ -130,15 +130,16 @@ class Gui:
 
         # adicionado a pagina
         page.add(
-
+            
+            ft.Row(  
+            [ft.ElevatedButton(icon = ft.Image(src='/imagens/arrow_back_FILL0_wght400_GRAD0_opsz24.png'),bgcolor='purple')],
+            alignment=ft.alignment.top_left),
             ft.Row(
-
                 [
                     field_nome,
                     field_email
                 ],
-                alignment=alinhamento
-
+                alignment=alinhamento    
             ),
             ft.Row(
                 [
@@ -165,6 +166,8 @@ class Gui:
                 ],
                 alignment=alinhamento
             )
+                
+              
         )
 
     ft.app(target=main)   #rodar desktop
