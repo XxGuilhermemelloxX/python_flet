@@ -37,11 +37,19 @@ class Backend:
     def excluir(self,id):
         conn = sqlite3.connect('Cliente.db')
         cursor = conn.cursor()
-        query = (""" DELETE FROM Cliente WHERE ID = ? """)
-        params = (id)
+        id = int(id)
+        query = ("""DELETE FROM Cliente WHERE ID = ? """)
+        params = (id,)
         cursor.execute(query,params)
         conn.commit()
         conn.close()  
-        
+    def get_id(self):
+        conn = sqlite3.connect('Cliente.db')
+        cursor = conn.cursor()
+        cursor.execute("""SELECT ID FROM Cliente""")
+        rows = cursor.fetchall()
+       
+        return rows
+           
                         
             

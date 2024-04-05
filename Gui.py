@@ -74,25 +74,6 @@ class Gui:
 
             page.update()
 
-        def btn_visualizar(e):
-            page.clean()
-            data = back.visualizar()
-            list_view = ft.ListView(spacing=8)
-
-            if data is not None:
-                for row in data:
-                    formated_row = ' - '.join(f'{key}:{value}' for key, value in row.items())
-                    list_view.controls.append(ft.Text(formated_row, text_align=ft.TextAlign.CENTER))
-
-            page.add(list_view)
-            page.update()
-
-        def btn_page_editar(e):
-            page.route = '/editar'
-            page.add(
-                
-            )
-
         def btn_registrar(e):
             if not field_choise.value:
                 field_choise.error_text = 'Escolha uma opção'
@@ -126,7 +107,7 @@ class Gui:
                 ft.View(
                     '/',
                     [
-                        ft.AppBar(title=ft.Text('Uma aplicação flet'), bgcolor=ft.colors.SURFACE_VARIANT,center_title=True),
+                        ft.AppBar(title=ft.Text('Uma aplicação flet'), bgcolor='#141414',center_title=True),
                         ft.Row([ft.Text('Cadastro de pessoas',text_align=ft.TextAlign.CENTER,weight=ft.FontWeight.W_900)],alignment=alinhamento),
                         ft.Row(
                             [
@@ -153,34 +134,72 @@ class Gui:
                         ft.Row(
                             [
                                 ft.ElevatedButton('Cadastrar', on_click=botao_cadastar),
-                                ft.ElevatedButton('Visualizar', on_click=lambda _:page.route('/visualizar')),
-                                ft.ElevatedButton('Editar', on_click=lambda _:page.route('/editar')),
+                                ft.ElevatedButton('Visualizar', on_click=lambda _:page.go('/visualizar')),
+                                ft.ElevatedButton('Editar', on_click=lambda _:page.go('/editar')),
                                 ft.ElevatedButton('Deletar')
 
                             ],
                             alignment=alinhamento
                         )
-                    ]
+                    ],
+                    bgcolor='#171717',horizontal_alignment=alinhamento,vertical_alignment=alinhamento
                 ),
                                                      
             )
             
-            
             if page.route == '/editar':
                 page.views.append(
-                    page.views(
+                    ft.View(
                         '/editar',
                         [
-                            ft.AppBar(title=ft.Text('Editar',bgcolor=back_color)),
-                            ft.Row([field_choise, field_ID]),
-                            ft.Row([field_new_choise]),
-                            ft.Row([ft.ElevatedButton('Registrar', on_click=btn_registrar, width=250),ft.ElevatedButton('Voltar',on_click=lambda _:page.go('/'))])
+                            ft.AppBar(title=ft.Text('Editar',bgcolor=back_color),center_title=True),
+                            ft.Row([field_choise, field_ID],alignment=alinhamento),
+                            ft.Row([field_new_choise],alignment=alinhamento),
+                            ft.Row([ft.ElevatedButton('Registrar', on_click=btn_registrar, width=250)],alignment=alinhamento)
                         ]
                     )
                 )
+            elif page.route == '/visualizar':
+                data = back.visualizar()
+                list_view = ft.ListView(spacing=8)
+
+                if data is not None:
+                    for row in data:
+                        formated_row = ' - '.join(f'{key}:{value}' for key, value in row.items())
+                        id = row['ID']
+                        delete_btn = ft.ElevatedButton('Deletar',on_click=lambda id=id:delete_linha(id))
+                        list_view.controls.append(
+                            ft.Row(
+                                [
+                                    ft.Text(formated_row, text_align=ft.TextAlign.CENTER),
+                                    delete_btn,  
+                                ], 
+                                    alignment=alinhamento
+                                    )
+                            
+                            )
+                            
+                            
+                page.views.append(
+                    ft.View(
+                        '/visualizar',
+                        [
+                            
+                                list_view
+                            
+                        ]
+                    )
+                )
+            
+            
+            
             page.update()
         
 
+        def delete_linha(index):
+            back.excluir(index)
+            
+            
         def pop_view(view):
             page.views.pop()
             top_view = page.views[-1]
