@@ -136,7 +136,6 @@ class Gui:
                                 ft.ElevatedButton('Cadastrar', on_click=botao_cadastar),
                                 ft.ElevatedButton('Visualizar', on_click=lambda _:page.go('/visualizar')),
                                 ft.ElevatedButton('Editar', on_click=lambda _:page.go('/editar')),
-                                ft.ElevatedButton('Deletar')
 
                             ],
                             alignment=alinhamento
@@ -162,12 +161,12 @@ class Gui:
             elif page.route == '/visualizar':
                 data = back.visualizar()
                 list_view = ft.ListView(spacing=8)
-
+                
                 if data is not None:
                     for row in data:
                         formated_row = ' - '.join(f'{key}:{value}' for key, value in row.items())
                         id = row['ID']
-                        delete_btn = ft.ElevatedButton('Deletar',on_click=lambda id=id:delete_linha(id))
+                        delete_btn = ft.ElevatedButton('Deletar',on_click=lambda event, id=id:delete_linha(id))
                         list_view.controls.append(
                             ft.Row(
                                 [
@@ -177,14 +176,12 @@ class Gui:
                                     alignment=alinhamento
                                     )
                             
-                            )
-                            
-                            
+                            )      
+                    
                 page.views.append(
                     ft.View(
                         '/visualizar',
                         [
-                            
                                 list_view
                             
                         ]
@@ -197,8 +194,10 @@ class Gui:
         
 
         def delete_linha(index):
-            back.excluir(index)
+            back.excluir(index) 
+       
             
+           
             
         def pop_view(view):
             page.views.pop()

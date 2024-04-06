@@ -8,11 +8,11 @@ class Backend:
     def inserir(self,nome,email,senha,tel,sexo):
         conn = sqlite3.connect('Cliente.db')
         cursor = conn.cursor() #é um interador que permite navegar e manipular os registros do bd
-        query = """
+        query_insert = """
                         INSERT INTO CLIENTE (Nome,Email,Telefone,Sexo,Senha) 
                         VALUES(?,?,?,?,?)"""#query é uma string que contém a instrução SQL. Os ? são placeholders que serão substituídos pelos valores em params
         params = (nome,email,tel,sexo,senha) #é uma tupla que contém os valores que você deseja inserir no banco de dados. A ordem dos valores na tupla corresponde à ordem dos placeholders na consulta.
-        cursor.execute(query,params)
+        cursor.execute(query_insert,params)
         conn.commit()
         conn.close()
     
@@ -37,19 +37,11 @@ class Backend:
     def excluir(self,id):
         conn = sqlite3.connect('Cliente.db')
         cursor = conn.cursor()
-        id = int(id)
         query = ("""DELETE FROM Cliente WHERE ID = ? """)
         params = (id,)
         cursor.execute(query,params)
         conn.commit()
         conn.close()  
-    def get_id(self):
-        conn = sqlite3.connect('Cliente.db')
-        cursor = conn.cursor()
-        cursor.execute("""SELECT ID FROM Cliente""")
-        rows = cursor.fetchall()
-       
-        return rows
            
                         
             
