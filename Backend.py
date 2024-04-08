@@ -4,17 +4,39 @@ class Backend:
     def __init__(self) -> None:
         pass
 
-
-    def inserir(self,nome,email,senha,tel,sexo):
+    
+    def criar_tabela(self):
         conn = sqlite3.connect('Cliente.db')
-        cursor = conn.cursor() #é um interador que permite navegar e manipular os registros do bd
-        query_insert = """
-                        INSERT INTO CLIENTE (Nome,Email,Telefone,Sexo,Senha) 
-                        VALUES(?,?,?,?,?)"""#query é uma string que contém a instrução SQL. Os ? são placeholders que serão substituídos pelos valores em params
-        params = (nome,email,tel,sexo,senha) #é uma tupla que contém os valores que você deseja inserir no banco de dados. A ordem dos valores na tupla corresponde à ordem dos placeholders na consulta.
-        cursor.execute(query_insert,params)
-        conn.commit()
+        cursor = conn.cursor()
+        query = '''CREATE TABLE IF NOT EXISTS Cliente(
+                    ID INTEGER    PRIMARY KEY AUTOINCREMENT,
+                    Nome     TEXT,
+                    Email    TEXT,
+                    Telefone TEXT (15),
+                    sexo     TEXT (5),
+                    Senha    TEXT (255) 
+            );'''
+        cursor.execute(query)
         conn.close()
+    
+    def inserir(self,nome,email,senha,tel,sexo):
+        try:
+            conn = sqlite3.connect('Cliente.db')
+            cursor = conn.cursor() #é um interador que permite navegar e manipular os registros do bd
+            query_insert = """
+                            INSERT INTO CLIENTE (Nome,Email,Telefone,Sexo,Senha) 
+                            VALUES(?,?,?,?,?)"""#query é uma string que contém a instrução SQL. Os ? são placeholders que serão substituídos pelos valores em params
+            params = (nome,email,tel,sexo,senha) #é uma tupla que contém os valores que você deseja inserir no banco de dados. A ordem dos valores na tupla corresponde à ordem dos placeholders na consulta.
+            cursor.execute(query_insert,params)
+            conn.commit()
+            conn.close()
+        except sqlite3.OperationalError:
+            self.criar_tabela()
+        except sqlite3.DatabaseError as e:
+            print(f'(Ocorreu um erro: {e})')
+        except Exception as e:
+            print(f'Ocorreu um erro:{e}')
+            
     
     def visualizar(self):
         conn = sqlite3.connect('Cliente.db')
@@ -29,8 +51,8 @@ class Backend:
     def editar_dado(self,id,campo,novo_campo):
         conn = sqlite3.connect('Cliente.db')
         cursor = conn.cursor()
-        query = (f"""UPDATE cliente SET '{str(campo)}' = ? WHERE ID = ? """)
-        params = (novo_campo,id)
+        query = (f"""UPDATE cliente SET ? = ? WHERE ID = ? """)
+        params = (campo,novo_campo,id)
         cursor.execute(query,params)
         conn.commit()
         conn.close()    

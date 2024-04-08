@@ -71,6 +71,12 @@ class Gui:
                 senha_hash = hashlib.sha256(field_senha.value.encode())
                 senha = senha_hash.hexdigest()
                 back.inserir(field_nome.value, field_email.value, senha, field_tel.value, field_sexo.value)
+                field_nome.value = ''
+                field_email.value = ''
+                field_sexo.value = ''
+                field_tel.value = ''
+                field_senha.value = ''
+                
 
             page.update()
 
@@ -107,8 +113,7 @@ class Gui:
                 ft.View(
                     '/',
                     [
-                        ft.AppBar(title=ft.Text('Uma aplicação flet'), bgcolor='#141414',center_title=True),
-                        ft.Row([ft.Text('Cadastro de pessoas',text_align=ft.TextAlign.CENTER,weight=ft.FontWeight.W_900)],alignment=alinhamento),
+                        ft.AppBar(title=ft.Text('Cadastro de pessoas'), bgcolor='#141414',center_title=True),
                         ft.Row(
                             [
                                 field_nome,
@@ -151,7 +156,7 @@ class Gui:
                     ft.View(
                         '/editar',
                         [
-                            ft.AppBar(title=ft.Text('Editar',bgcolor=back_color),center_title=True),
+                            ft.AppBar(title=ft.Text('Editar cadastro'), bgcolor='#141414',center_title=True),
                             ft.Row([field_choise, field_ID],alignment=alinhamento),
                             ft.Row([field_new_choise],alignment=alinhamento),
                             ft.Row([ft.ElevatedButton('Registrar', on_click=btn_registrar, width=250)],alignment=alinhamento)
@@ -214,7 +219,5 @@ class Gui:
       
         
 
-       
-       
     #ft.app(target=main)   rodar desktop
     ft.app(target=main,view=ft.AppView.WEB_BROWSER)#rodar no browser
