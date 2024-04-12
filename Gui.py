@@ -113,7 +113,7 @@ class Gui:
                 ft.View(
                     '/',
                     [
-                        ft.AppBar(title=ft.Text('Cadastro de pessoas'), bgcolor='#141414',center_title=True),
+                        ft.AppBar(title=ft.Text('Cadastro de pessoas'), bgcolor= ft.colors.GREY,center_title=True),
                         ft.Row(
                             [
                                 field_nome,
@@ -146,7 +146,7 @@ class Gui:
                             alignment=alinhamento
                         )
                     ],
-                    bgcolor='#171717',horizontal_alignment=alinhamento,vertical_alignment=alinhamento
+                    bgcolor = ft.colors.WHITE,horizontal_alignment=alinhamento,vertical_alignment=alinhamento
                 ),
                                                      
             )
