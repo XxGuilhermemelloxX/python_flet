@@ -113,7 +113,7 @@ class Gui:
                 ft.View(
                     '/',
                     [
-                        ft.AppBar(title=ft.Text('Cadastro de pessoas'), bgcolor= ft.colors.GREY,center_title=True),
+                        ft.AppBar(title=ft.Text('Cadastro de pessoas'), bgcolor='#141414',center_title=True),
                         ft.Row(
                             [
                                 field_nome,
@@ -146,7 +146,7 @@ class Gui:
                             alignment=alinhamento
                         )
                     ],
-                    bgcolor = ft.colors.WHITE,horizontal_alignment=alinhamento,vertical_alignment=alinhamento
+                    bgcolor='#171717',horizontal_alignment=alinhamento,vertical_alignment=alinhamento
                 ),
                                                      
             )
@@ -165,20 +165,28 @@ class Gui:
                 )
             elif page.route == '/visualizar':
                 data = back.visualizar()
-                list_view = ft.ListView(spacing=8)
+                list_view = ft.ListView(spacing=8,expand=True)
                 
                 if data is not None:
                     for row in data:
-                        formated_row = ' - '.join(f'{key}:{value}' for key, value in row.items())
                         id = row['ID']
+                        nome = row['Nome']
+                        email = row['Email']
+                        tel = row['Telefone']
+                        sexo = row['sexo']
+                        senha = row['Senha']
                         delete_btn = ft.ElevatedButton('Deletar',on_click=lambda event, id=id:delete_linha(id))
                         list_view.controls.append(
                             ft.Row(
                                 [
-                                    ft.Text(formated_row, text_align=ft.TextAlign.CENTER),
-                                    delete_btn,  
+                                  ft.Container(
+                                        ft.Text(f'{nome}{email}{tel}{sexo}{senha}'),
+                                        delete_btn,  
+                                        border=ft.border.all(1),
+                                        border_radius=ft.border_radius.all(6),           
+                                    )
                                 ], 
-                                    alignment=alinhamento
+                                   alignment=alinhamento 
                                     )
                             
                             )      
@@ -187,23 +195,19 @@ class Gui:
                     ft.View(
                         '/visualizar',
                         [
-                                list_view
-                            
-                        ]
+                            ft.Text('NomeEmailTelefoneSexoSenha',weight=ft.FontWeight.W_800),
+                            list_view
+                        ],
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER
                     )
                 )
-            
-            
             
             page.update()
         
 
         def delete_linha(index):
             back.excluir(index) 
-       
-            
-           
-            
+        
         def pop_view(view):
             page.views.pop()
             top_view = page.views[-1]
@@ -213,11 +217,6 @@ class Gui:
         page.on_view_pop = pop_view
         page.go(page.route)
 
-    
-        
-
-      
-        
-
+           
     #ft.app(target=main)   rodar desktop
     ft.app(target=main,view=ft.AppView.WEB_BROWSER)#rodar no browser
