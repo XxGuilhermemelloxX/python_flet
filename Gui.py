@@ -16,14 +16,14 @@ class Gui:
         #Criação dos campos
         field_nome = ft.TextField(label='Nome*', width=300)
         field_email = ft.TextField(label='Email*', width=300, keyboard_type=ft.KeyboardType.EMAIL)
-        field_tel = ft.TextField(label='Telefone*', width=250, keyboard_type=ft.KeyboardType.PHONE)
+        field_tel = ft.TextField(label='Telefone*', width=250, keyboard_type=ft.KeyboardType.PHONE,max_length=14)
         field_sexo = ft.Dropdown(
             width=100,
             options=[
                 ft.dropdown.Option('Masculino'),
                 ft.dropdown.Option('feminino')
             ]
-            , label='SEXO'
+            , label='SEXO'  
         )
         field_senha = ft.TextField(label='Senha*', width=250, password=True)
         field_choise = ft.Dropdown(
@@ -166,7 +166,7 @@ class Gui:
             elif page.route == '/visualizar':
                 data = back.visualizar()
                 list_view = ft.ListView(spacing=8,expand=True)
-                
+    
                 if data is not None:
                     for row in data:
                         id = row['ID']
@@ -177,30 +177,42 @@ class Gui:
                         senha = row['Senha']
                         delete_btn = ft.ElevatedButton('Deletar',on_click=lambda event, id=id:delete_linha(id))
                         list_view.controls.append(
-                            ft.Row(
-                                [
-                                  ft.Container(
-                                        ft.Text(f'{nome}{email}{tel}{sexo}{senha}'),
-                                        delete_btn,  
-                                        border=ft.border.all(1),
-                                        border_radius=ft.border_radius.all(6),           
-                                    )
-                                ], 
-                                   alignment=alinhamento 
-                                    )
-                            
-                            )      
-                    
+                        ft.Row(
+                            [
+                            ft.Container(
+                                    ft.Text(f'NOME: {nome}'),
+                                    
+                                ),
+                            ft.Container(
+                                    ft.Text(f'E-MAIL: {email}'),       
+                                ),
+                            ft.Container(
+                                    ft.Text(f'TELEFONE: {tel}'), 
+                  
+                                ),
+                            ft.Container(
+                                    ft.Text(f'SEXO: {sexo}'),       
+                                ),
+                            ft.Container(
+                                    ft.Text(f'SENHA: {senha}'), 
+                                ),
+                            delete_btn
+                            ],  
+                            alignment=alinhamento
+                                )
+                        
+                        )      
+            
                 page.views.append(
                     ft.View(
                         '/visualizar',
                         [
-                            ft.Text('NomeEmailTelefoneSexoSenha',weight=ft.FontWeight.W_800),
                             list_view
                         ],
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER
                     )
                 )
+
             
             page.update()
         
