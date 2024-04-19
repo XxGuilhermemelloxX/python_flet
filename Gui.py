@@ -16,7 +16,7 @@ class Gui:
         #Criação dos campos
         field_nome = ft.TextField(label='Nome*', width=300)
         field_email = ft.TextField(label='Email*', width=300, keyboard_type=ft.KeyboardType.EMAIL)
-        field_tel = ft.TextField(label='Telefone*', width=250, keyboard_type=ft.KeyboardType.PHONE,max_length=14)
+        field_tel = ft.TextField(label='Telefone*', width=250, keyboard_type=ft.KeyboardType.PHONE,max_length=11)
         field_sexo = ft.Dropdown(
             width=100,
             options=[
@@ -80,31 +80,30 @@ class Gui:
 
             page.update()
 
-        def btn_registrar(e):
-            if not field_choise.value:
-                field_choise.error_text = 'Escolha uma opção'
+        def editar(event,id):
+            page._id = id
+            page.go('/editar')
+            
+        def btn_editar(e):
+            try:
+                id = page._id
+                if not field_choise.value:
+                    field_choise.error_text = 'Escolha uma opção'
+                    page.update()
+                elif not field_new_choise.value:
+                    field_new_choise.error_text = 'o campo não pode estar vazio'
+                    page.update()
+                elif field_choise.value == 'Telefone' and not field_new_choise.value.isdigit():
+                    field_new_choise.error_text = 'O telefone só pode ser numeros'
+                    page.update()
+                else:
+                    field_choise.error_text = ''
+                    field_new_choise.error_text = ''
+                    back.editar_dado(id, field_choise.value, field_new_choise.value)
                 page.update()
-            elif not field_new_choise.value:
-                field_new_choise.error_text = 'o campo não pode estar vazio'
-                page.update()
-            elif not field_ID.value:
-                field_ID.error_text = 'O Campo está vazio'
-                page.update()
-            elif not field_ID.value.isdigit():
-                field_ID.error_text = 'O ID só pode ser numeros'
-                page.update()
-            elif field_choise.value == 'Telefone' and not field_new_choise.value.isdigit():
-                field_new_choise.error_text = 'O telefone só pode ser numeros'
-                page.update()
-
-            else:
-                field_choise.error_text = ''
-                field_new_choise.error_text = ''
-                field_ID.error_text = ''
-                id = int(field_ID.value)
-                back.editar_dado(id, field_choise.value, field_new_choise.value)
-            page.update()
-
+                page.go('/')
+            except Exception as e:
+                print(f'OCORREU UM ERRO:{e}')
          # adicionado a pagina e as rotas
         def route_change(route):
             back_color = ft.colors.SURFACE_VARIANT
@@ -140,8 +139,6 @@ class Gui:
                             [
                                 ft.ElevatedButton('Cadastrar', on_click=botao_cadastar),
                                 ft.ElevatedButton('Visualizar', on_click=lambda _:page.go('/visualizar')),
-                                ft.ElevatedButton('Editar', on_click=lambda _:page.go('/editar')),
-
                             ],
                             alignment=alinhamento
                         )
@@ -156,10 +153,10 @@ class Gui:
                     ft.View(
                         '/editar',
                         [
-                            ft.AppBar(title=ft.Text('Editar cadastro'), bgcolor='#141414',center_title=True),
-                            ft.Row([field_choise, field_ID],alignment=alinhamento),
+                            ft.AppBar(title=ft.Text('Editar cadastro'), bgcolor=ft.colors.BLACK12,center_title=True),
+                            ft.Row([field_choise],alignment=alinhamento),
                             ft.Row([field_new_choise],alignment=alinhamento),
-                            ft.Row([ft.ElevatedButton('Registrar', on_click=btn_registrar, width=250)],alignment=alinhamento)
+                            ft.Row([ft.ElevatedButton('Registrar', on_click=btn_editar, width=250)],alignment=alinhamento)
                         ]
                     )
                 )
@@ -175,6 +172,7 @@ class Gui:
                         tel = row['Telefone']
                         sexo = row['sexo']
                         senha = row['Senha']
+                        btn_editar_id = ft.ElevatedButton('Editar',on_click=lambda event, id=id:editar(event,id))
                         delete_btn = ft.ElevatedButton('Deletar',on_click=lambda event, id=id:delete_linha(id))
                         list_view.controls.append(
                         ft.Row(
@@ -196,6 +194,7 @@ class Gui:
                             ft.Container(
                                     ft.Text(f'SENHA: {senha}'), 
                                 ),
+                            btn_editar_id,
                             delete_btn
                             ],  
                             alignment=alinhamento
@@ -218,7 +217,8 @@ class Gui:
         
 
         def delete_linha(index):
-            back.excluir(index) 
+            back.excluir(index)
+            page.go('/')
         
         def pop_view(view):
             page.views.pop()

@@ -49,13 +49,17 @@ class Backend:
         return data
         
     def editar_dado(self,id,campo,novo_campo):
-        conn = sqlite3.connect('Cliente.db')
-        cursor = conn.cursor()
-        query = (f"""UPDATE cliente SET ? = ? WHERE ID = ? """)
-        params = (campo,novo_campo,id)
-        cursor.execute(query,params)
-        conn.commit()
-        conn.close()    
+        try:
+            conn = sqlite3.connect('Cliente.db')
+            cursor = conn.cursor()
+            query = (f"""UPDATE cliente SET '{campo}' = ? WHERE ID = ? """)
+            params = (novo_campo,id)
+            cursor.execute(query,params)
+            conn.commit()
+            conn.close()
+        except Exception as e:
+            print(f'OCORREU UM ERRO:{e}')
+             
     def excluir(self,id):
         conn = sqlite3.connect('Cliente.db')
         cursor = conn.cursor()
